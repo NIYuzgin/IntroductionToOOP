@@ -68,6 +68,20 @@ public:
 		return *this;
 	}
 	
+	Point& operator++ () // prefix increment
+	{
+		x++;
+		y++;
+		return *this;
+	}
+	
+	Point operator++ (int) // postfix (Suffix) increment
+	{
+		Point old = *this; // сохраняем старое значение объекта
+		x++;
+		y++;
+		return old;
+	}
 	
 	// Methods:
 
@@ -96,9 +110,38 @@ double distance(const Point& A, const Point& B)  {
 	return distance;
 }
 
+Point operator+ (const Point& left, const Point& right) {
+		
+	Point result;
+	result.set_x(left.get_x() + right.get_x());
+	result.set_y(left.get_y() + right.get_y());
+	return result;
+}
+
+bool operator== (const Point& left, const Point& right) {
+	/*
+	if (left.get_x() == right.get_x() && left.get_y() == right.get_y())
+	return true;
+	else
+		return false;
+	*/
+
+	return left.get_x() == right.get_x() && left.get_y() == right.get_y();
+	}
+bool operator!= (const Point& left, const Point& right) {
+	
+	return !(left == right);
+}
+
+
+
+
 // #define STRUCT_POINT
 //#define DISTANCE_CHECK
 //#define CONSTRUCTORS_CHECK
+//#define ASSIGNMENT_CHECK
+//#define ARIFMETICAL_OPERATOR_CHECK
+
 
 void main() {
 	setlocale(LC_ALL, "");
@@ -185,6 +228,7 @@ void main() {
 
 #endif CONSTRUCTORS_CHECK
 
+#ifdef ASSIGNMENT_CHECK
 	int a, b, c;
 	a = b = c = 0;
 	cout << a << "\t" << b << "\t" << c << endl;
@@ -197,6 +241,26 @@ void main() {
 	A.Print();
 	B.Print();
 	C.Print();
+#endif ASSIGNMENT_CHECK
+
+#ifdef ARIFMETICAL_OPERATOR_CHECK
+
+	Point A(2, 3);
+	Point B(7, 8);
+	Point C = A + B;
+	C.Print();
+
+	A = ++B;
+	A.Print();
+	B.Print();
+	
+	A = B++;
+	A.Print();
+	B.Print();
+
+#endif ARIFMETICAL_OPERATOR_CHECK
+
+	cout << (Point(2, 3) != Point(7, 8)) << endl;
 
 }
 

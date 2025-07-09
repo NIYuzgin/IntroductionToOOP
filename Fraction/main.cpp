@@ -101,12 +101,20 @@ public:
 		integer++;
 		return *this;
 	}
+	
+	Fraction& operator-- ()
+	{
+		Fraction old = *this;
+		integer++;
+		return old;
+	}
 	Fraction operator++ (int) // постфиксный инкремент
 	{
 		Fraction old = *this;
 		integer++;
 		return old;
 	}
+
 
 	// Methods:
 
@@ -219,10 +227,29 @@ bool operator <= (const Fraction & left, const Fraction & right) {
 	return !(left > right);
 	//return left > right || left == right;
 }
+std:: ostream& operator << (std::ostream& os, const Fraction& obj)
+{
+	if (obj.get_integer())os << obj.get_integer();
+	if (obj.get_numerator()) {
+		if (obj.get_integer())os << "(";
+
+		os << obj.get_numerator() << "/" << obj.get_denominator();
+		if (obj.get_integer())os << ")";
+	}
+	else if (obj.get_integer() == 0) os << 0;
+
+	return os;
+}
+//<< obj.get_integer()
 
 //#define CONSTRUCTORS_CHECK
 //#define ARITHMETICAL_OPERATORS_CHECK
 //#define INCREMENTO_DECREMENTO_CHECK
+
+// #define COMPARISON_OPERATORS
+
+
+
 
 void main() {
 	setlocale(LC_ALL, "");
@@ -281,9 +308,23 @@ void main() {
 	A.print();
 	B.print();
 #endif INCREMENTO_DECREMENTO_CHECK
-	 
+#ifdef COMPARISON_OPERATORS
+
 	cout << (2 == 3) << endl;
 	cout << (Fraction(1, 2) <= Fraction(5, 10)) << endl;
+#endif COMPARISON_OPERATORS
+	
+	Fraction A(2, 3, 4);
+	cout << A << endl;
+
+
+
+	/*
+	for (Fraction i(9, 1, 2); i > 0; --i) {
+		i.print();
+	}
+*/
+
 
 }
 

@@ -1,17 +1,17 @@
-#include <iostream>
+п»ї#include <iostream>
 
 using namespace std;
 
-class Fraction; // объявление класса
-Fraction operator* (Fraction left, Fraction right); // объявление оператора
+class Fraction; // РѕР±СЉСЏРІР»РµРЅРёРµ РєР»Р°СЃСЃР°
+Fraction operator* (Fraction left, Fraction right); // РѕР±СЉСЏРІР»РµРЅРёРµ РѕРїРµСЂР°С‚РѕСЂР°
 Fraction operator/ (const Fraction& left, const Fraction& right);
 
 
-class Fraction // описание класса
+class Fraction // РѕРїРёСЃР°РЅРёРµ РєР»Р°СЃСЃР°
 {
-	int integer; //целая часть
-	int numerator; //числитель
-	int denominator; //знаменатель
+	int integer; //С†РµР»Р°СЏ С‡Р°СЃС‚СЊ
+	int numerator; //С‡РёСЃР»РёС‚РµР»СЊ
+	int denominator; //Р·РЅР°РјРµРЅР°С‚РµР»СЊ
 
 public:
 	int get_integer()const {
@@ -96,12 +96,12 @@ public:
 
 	// Incremento/Decremento:
 
-	Fraction& operator++ () // префиксный инкремент
+	Fraction& operator++ () // РїСЂРµС„РёРєСЃРЅС‹Р№ РёРЅРєСЂРµРјРµРЅС‚
 	{
 		integer++;
 		return *this;
 	}
-	Fraction operator++ (int) // постфиксный инкремент
+	Fraction operator++ (int) // РїРѕСЃС‚С„РёРєСЃРЅС‹Р№ РёРЅРєСЂРµРјРµРЅС‚
 	{
 		Fraction old = *this;
 		integer++;
@@ -110,13 +110,13 @@ public:
 
 	// Methods:
 
-	Fraction& to_improper() //перевод в неправильную дробь
+	Fraction& to_improper() //РїРµСЂРµРІРѕРґ РІ РЅРµРїСЂР°РІРёР»СЊРЅСѓСЋ РґСЂРѕР±СЊ
 	{
 		numerator += integer * denominator;
 		integer = 0;
 		return *this;
 	}
-	Fraction& to_proper() //перевод в правильную дробь
+	Fraction& to_proper() //РїРµСЂРµРІРѕРґ РІ РїСЂР°РІРёР»СЊРЅСѓСЋ РґСЂРѕР±СЊ
 	{
 		integer += numerator / denominator;
 		numerator %= denominator;
@@ -126,7 +126,7 @@ public:
 	Fraction inverted() const {
 		Fraction inverted = *this;
 		inverted.to_improper();
-		swap(inverted.numerator, inverted.denominator); // функция swap() меняет местами две переменные
+		swap(inverted.numerator, inverted.denominator); // С„СѓРЅРєС†РёСЏ swap() РјРµРЅСЏРµС‚ РјРµСЃС‚Р°РјРё РґРІРµ РїРµСЂРµРјРµРЅРЅС‹Рµ
 		return inverted;
 	}
 	Fraction& reduce() {
@@ -138,7 +138,7 @@ public:
 			more = less;
 			less = rest;
 		} while (rest);
-		int GCD = more; //GCD - Greatest Common Divisor (Наибольший общий делитель)
+		int GCD = more; //GCD - Greatest Common Divisor (РќР°РёР±РѕР»СЊС€РёР№ РѕР±С‰РёР№ РґРµР»РёС‚РµР»СЊ)
 		numerator /= GCD;
 		denominator /= GCD;
 		return *this;

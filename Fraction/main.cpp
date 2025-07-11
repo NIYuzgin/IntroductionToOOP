@@ -107,6 +107,19 @@ public:
 		integer++;
 		return old;
 	}
+	
+	Fraction& operator-- () // префиксный инкремент
+	{
+		integer--;
+		return *this;
+	}
+	Fraction operator-- (int) // постфиксный инкремент
+	{
+		Fraction old = *this;
+		integer--;
+		return old;
+	}
+
 
 	// Methods:
 
@@ -222,16 +235,24 @@ bool operator <= (const Fraction& left, const Fraction& right) {
 }
 
 
-
-
-
-
-
+std::ostream& operator << (std::ostream& os, const Fraction& obj) {
+	if (obj.get_integer())os << obj.get_integer();
+	if (obj.get_numerator()) {
+		if (obj.get_integer())os << "(";
+		os << obj.get_numerator() << "/" << obj.get_denominator();
+		if (obj.get_integer())os << ")";
+	}
+	else if (obj.get_integer() == 0) os << 0;
+	return os;
+}
 
 
 //#define CONSTRUCTORS_CHECK
 //#define ARITHMETICAL_OPERATORS_CHECK
 //#define INCREMENTO_DECREMENTO_CHECK
+//#define COMPARISON_OPERATORS
+#define STREAMS_CHECK
+
 
 void main() {
 	setlocale(LC_ALL, "");
@@ -291,7 +312,31 @@ void main() {
 	B.print();
 #endif INCREMENTO_DECREMENTO_CHECK
 
+#ifdef COMPARISON_OPERATORS
+
 	cout << (2 == 3) << endl;
 	cout << (Fraction(1, 3) <= Fraction(5, 11)) << endl;
+
+#endif COMPARISON_OPERATORS
+
+	/*
+	for (Fraction i(9, 1, 2); i > 0 ; --i) {
+		i.print();
+	}
+	*/
+
+#ifdef STREAMS_CHECK
+	
+	Fraction A(2, 3, 4);
+	cout << "Введите простую дробь: ";
+	cin >> A;
+	cout << A << endl;
+	//cout << A << endl;
+	 
+#endif STREAMS_CHECK
+
+
+
+
 }
 

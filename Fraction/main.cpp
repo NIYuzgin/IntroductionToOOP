@@ -44,12 +44,25 @@ public:
 		cout << "DefaultConstructor:\t" << this << endl;
 	}
 
-	Fraction(int integer) {
+	explicit Fraction(int integer) {
 		this->integer = integer;
 		this->numerator = 0;
 		this->denominator = 1;
 		cout << "SingleArgumentConstructor:\t" << this << endl;
 	}
+
+	Fraction(double decimal) // decimal - десятичная дробь
+	{
+		decimal += 1e-10;
+		integer = decimal;		//получаем целую часть дроби
+		decimal -= integer;		//убираем целую часть из десятичной дроби
+		denominator = 1e+9;		//получаем максимально возможный знаменатель 1000000000;
+		numerator = decimal * denominator; // вытаскиваем дробную часть в числитель
+		reduce();
+		cout << "SingleArgumentConstructor:\t" << this << endl;
+	}
+
+
 
 	Fraction(int numerator, int denominator) {
 		this->integer = 0;
@@ -107,7 +120,7 @@ public:
 		integer++;
 		return old;
 	}
-	
+
 	Fraction& operator-- () // префиксный инкремент
 	{
 		integer--;
@@ -118,6 +131,13 @@ public:
 		Fraction old = *this;
 		integer--;
 		return old;
+	}
+
+	// Type-cast operators:
+
+	explicit operator int()const {
+		// to_improper(); // evalueate as a constant
+		return integer + numerator / denominator;
 	}
 
 
@@ -251,7 +271,11 @@ std::ostream& operator << (std::ostream& os, const Fraction& obj) {
 //#define ARITHMETICAL_OPERATORS_CHECK
 //#define INCREMENTO_DECREMENTO_CHECK
 //#define COMPARISON_OPERATORS
-#define STREAMS_CHECK
+//#define STREAMS_CHECK
+//#define TYPE_CONVERSIONS_BASICS
+//#define CONVERSIONS_FROM_OTHER_TO_CLASS
+//#define CONVERSIONS_FROM_CLASS_TO_OTHER
+#define HAVE_A_NICE_DAY
 
 
 void main() {
@@ -326,17 +350,57 @@ void main() {
 	*/
 
 #ifdef STREAMS_CHECK
-	
+
 	Fraction A(2, 3, 4);
 	cout << "Введите простую дробь: ";
 	cin >> A;
 	cout << A << endl;
 	//cout << A << endl;
-	 
+
 #endif STREAMS_CHECK
 
+#ifdef TYPE_CONVERSIONS_BASICS
+
+	int a = 2;	// No conversion
+	double b = 3;	// Conversion from less to more
+	int c = b;	// Conversion from more to less whithout data loss
+	int d = 5.5;	// Conversion from more to less with data loss
+
+#endif TYPE_CONVERSIONS_BASICS
+
+#ifdef CONVERSIONS_FROM_OTHER_TO_CLASS
+
+	Fraction A = (Fraction)5;		//Single-Argument constructor (from less to more)
+	cout << A << endl;
+
+	Fraction B;
+	B = (Fraction)8;		//Single-Argument constructor -> CopyAssignment (from less to more)
+	//Single-Argument constructor создает из '8' временный безымянный объект,
+	//а оператор присваивания просто записывает его в существующий объект 'B'
+
+#endif CONVERSIONS_FROM_OTHER_TO_CLASS
+
+#ifdef CONVERSIONS_FROM_CLASS_TO_OTHER
+
+	Fraction A(2, 3, 4);
+	A.to_improper().print();
+	int a = (int)A;
+	cout << a << endl;
+
+	double b = A;
+	cout << b << endl;
+
+#endif CONVERSIONS_FROM_CLASS_TO_OTHER
+
+#ifdef HAVE_A_NICE_DAY
+	
+	Fraction A = 3.333; 3.14159265359; //conversion from 'double' to 'Fraction'
+	cout << A << endl;
+
+#endif HAVE_A_NICE_DAY
 
 
 
 }
+
 

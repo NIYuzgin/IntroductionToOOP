@@ -96,13 +96,17 @@ public:
 		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
 	}
-
 	Fraction& operator*= (const Fraction& other) {
 		return *this = *this * other;
 	}
-
 	Fraction& operator/= (const Fraction& other) {
 		return *this = *this / other;
+	}
+	Fraction& operator+= (const Fraction& other) {
+		return *this = *this + other;
+	}
+	Fraction& operator-= (const Fraction& other) {
+		return *this = *this - other;
 	}
 
 	// Incremento/Decremento:
@@ -198,6 +202,14 @@ Fraction operator+ (Fraction left, Fraction right) {
 	right.to_improper();
 	return Fraction
 	(left.get_numerator() * right.get_denominator() + right.get_numerator() * left.get_denominator(),
+		left.get_denominator() * right.get_denominator()
+	).to_proper();
+}
+Fraction operator- (Fraction left, Fraction right) {
+	left.to_improper();
+	right.to_improper();
+	return Fraction
+	(left.get_numerator() * right.get_denominator() - right.get_numerator() * left.get_denominator(),
 		left.get_denominator() * right.get_denominator()
 	).to_proper();
 }
@@ -302,10 +314,10 @@ std::istream& operator >> (std::istream& is, Fraction& obj) {
 
 
 //#define CONSTRUCTORS_CHECK
-//#define ARITHMETICAL_OPERATORS_CHECK
+#define ARITHMETICAL_OPERATORS_CHECK
 //#define INCREMENTO_DECREMENTO_CHECK
 //#define COMPARISON_OPERATORS
-#define STREAMS_CHECK
+//#define STREAMS_CHECK
 //#define TYPE_CONVERSIONS_BASICS
 //#define CONVERSIONS_FROM_OTHER_TO_CLASS
 //#define CONVERSIONS_FROM_CLASS_TO_OTHER
@@ -351,8 +363,15 @@ void main() {
 
 	C = A + B;
 	C.print();
+	
+	C = B - A;
+	C.print();
 
-
+	A += B;
+	A.print();
+	
+	A -= B;
+	A.print();
 
 #endif ARITHMETICAL_OPERATORS_CHECK
 
@@ -431,8 +450,6 @@ void main() {
 	cout << A << endl;
 
 #endif HAVE_A_NICE_DAY
-
-
 
 }
 

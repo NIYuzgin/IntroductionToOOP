@@ -61,6 +61,35 @@ public:
 		cout << "Destructor:\t\t" << this << endl;
 	}
 
+	//	Operators:
+
+	String& operator= (const String& other){
+		
+		//0) Проверяем, не является ли тот объект этим объектом
+		if (this == &other)return *this;
+		//1) удаляем старую динамическую память
+		delete[] this->str;
+		
+		//this->str = other.str; // Shallow copy
+		this->size = other.size;
+
+		//2) выделяем новую динамическую память
+		this->str = new char[size] {};
+		for (int i = 0; i < size; i++)
+		this->str[i] = other.str[i];
+		cout << "CopyAssignment:\t\t" << this << endl;
+		return *this;
+	}
+	 
+	char operator[](int i) const {
+		return str[i];
+	}
+	
+	char& operator[](int i) {
+		return str[i];
+	}
+
+
 	//	Methods:
 
 	void print()const {
@@ -73,9 +102,11 @@ public:
 String operator+(const String& left, const String& right) {
 	String result (left.get_size() + right.get_size() - 1);
 	for (int i = 0; i < left.get_size(); i++)
-		result.get_str()[i] = left.get_str()[i];
+		result[i] = left[i];
+		//result.get_str()[i] = left.get_str()[i];
 	for (int i = 0; i < right.get_size(); i++)
-		result.get_str()[i + left.get_size() - 1] = right.get_str()[i];
+		result[i + left.get_size() - 1] = right[i];
+		//result.get_str()[i + left.get_size() - 1] = right.get_str()[i];
 	return result;
 }
 
@@ -88,7 +119,8 @@ void Clear(char* str) {
 	delete[] str;
 }
 		
-// #define CONSTRUCTORS_CHECK
+ #define CONSTRUCTORS_CHECK
+//#define COPY_SEMANTIC_CHECK
 
 void main() {
 	setlocale(LC_ALL, "");
@@ -115,12 +147,18 @@ void main() {
 
 #endif CONSTRUCTORS_CHECK
 
+#ifdef COPY_SEMANTIC_CHECK
 	String str1 = "Hello";
+	str1 = str1;
 	cout << str1 << endl;
-	
-	String str2 = str1;
+
+	String str2;
+	str2 = str1;
+
 	cout << str2 << endl;
-	
+
+#endif COPY_SEMANTIC_CHECK
+
 
 
 

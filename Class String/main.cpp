@@ -7,9 +7,8 @@ using std::endl;
 
 #define delimiter "\n---------------------------------------------\n"
 
-
 class String {
-	int size; // размер сторки в Байтах (с учетом NULL-Terminator)
+	int size; // размер строки в Байтах (с учетом NULL-Terminator)
 	char* str; // адрес строки в динамической памяти
 	
 public:
@@ -25,7 +24,6 @@ public:
 	char* get_str() {
 		return str;
 	}
-
 
 	//	Constructors:
 		
@@ -54,6 +52,16 @@ public:
 		cout << "CopyConstructor:\t" << this << endl;
 	}
 	
+	String(String&& other) {
+		// MoveConstructor -Shallow copy
+		this->size = other.size;
+		this->str = other.str;
+		// обнуляем принимаемый объект, для того, чтобы предотвратить удаление его ресурсов деструктором
+		other.size = 0;
+		other.str = nullptr;
+		cout << "MoveConstructor:\t" << this << endl;
+	}
+
 	~String() {
 		delete[] str;
 		str = nullptr;
@@ -69,26 +77,38 @@ public:
 		if (this == &other)return *this;
 		//1) удаляем старую динамическую память
 		delete[] this->str;
-		
-		//this->str = other.str; // Shallow copy
-		this->size = other.size;
-
+		//this->str = other.str; // Shallow copy - Поверхностное копирование
+		this->size = other.size; // Deep copy - Побитовое копирование
 		//2) выделяем новую динамическую память
-		this->str = new char[size] {};
-		for (int i = 0; i < size; i++)
-		this->str[i] = other.str[i];
+		this->str = new char[size] {}; 
+		for (int i = 0; i < size; i++) this->str[i] = other.str[i];
 		cout << "CopyAssignment:\t\t" << this << endl;
 		return *this;
 	}
-	 
-	char operator[](int i) const {
-		return str[i];
+	
+	String& operator= (String&& other) {
+		
+		//0) Проверяем, не является ли 'this' и 'other' одним и тем же объектом
+		if (this == &other)return *this;
+		//1) удаление старой памяти
+		delete[] str;
+		//2)	Shallow copy
+		this->size = other.size;
+		this->str = other.str;
+		//3) обнуляем принимаемый объект:
+		other.size = 0;
+		other.str = nullptr;
+		cout << "MoveAssignment:\t\t" << this << endl;
+		return *this;
+	}
+
+	char operator[](int i)const {
+		return str[i]; // [] - Index operator, Subscript operator
 	}
 	
 	char& operator[](int i) {
 		return str[i];
 	}
-
 
 	//	Methods:
 
@@ -114,11 +134,13 @@ std::ostream& operator<<(std::ostream& os, const String& obj) {
 	return os << obj.get_str();
 }
 
+/*
 void Clear(char* str) {
-
 	delete[] str;
 }
-		
+*/	
+
+
  #define CONSTRUCTORS_CHECK
 //#define COPY_SEMANTIC_CHECK
 
@@ -141,7 +163,8 @@ void main() {
 	cout << str4 << endl;
 
 	cout << delimiter << endl;
-	String str5 = str3 + str4;
+	String str5;
+	str5 = str3 + str4;
 	cout << delimiter << endl;
 	cout << str5 << endl;
 
@@ -158,14 +181,6 @@ void main() {
 	cout << str2 << endl;
 
 #endif COPY_SEMANTIC_CHECK
-
-
-
-
-
-	//int arr[] = { 3, 5, 8, 13, 21 };
-	//delete[] arr;
-
 
 }			
 			

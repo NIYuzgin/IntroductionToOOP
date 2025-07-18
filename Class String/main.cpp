@@ -34,7 +34,7 @@ public:
 		cout << "DefaultConstructor:\t" << this << endl;
 	}
 	 
-	String(const char* str) : size(strlen(str) + 1), str(new char[size] {}) {
+	String(const char* str) : String(strlen(str) + 1) {
 		//this->size = strlen(str) + 1;	// strlen() возвращает размер строки в символах,
 										//+1 нужен, чтобы выделилась память под NULL-Terminator
 		//this->str = new char[size] {};
@@ -42,13 +42,13 @@ public:
 		cout << "Constructor:\t\t" << this << endl;
 	}
 	
-	String(const String& other) : size(other.size), str(new char [size] {}) {
+	String(const String& other) : String(other.str) {
 		//this->size = other.size;
 		//this->str = other.str;    //Shallow copy
 		//Deep copy:
 		//this->str = new char[size] {};
-		for (int i = 0; i < size; i++)
-			this->str[i] = other.str[i];
+		//for (int i = 0; i < size; i++)
+			//this->str[i] = other.str[i];
 		cout << "CopyConstructor:\t" << this << endl;
 	}
 	

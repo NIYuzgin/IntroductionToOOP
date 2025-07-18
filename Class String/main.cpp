@@ -27,35 +27,35 @@ public:
 
 	//	Constructors:
 		
-	explicit String(int size = 80) //Конструктор по умолчанию создает строку размером 80 Байт
+	explicit String(int size = 80) : size(size), str(new char[size] {})//Конструктор по умолчанию создает строку размером 80 Байт
 	{
-		this->size = size;
+		//this->size = size;
 		this->str = new char[size] {};
 		cout << "DefaultConstructor:\t" << this << endl;
 	}
 	 
-	String(const char* str) {
-		this->size = strlen(str) + 1;	// strlen() возвращает размер строки в символах,
+	String(const char* str) : size(strlen(str) + 1), str(new char[size] {}) {
+		//this->size = strlen(str) + 1;	// strlen() возвращает размер строки в символах,
 										//+1 нужен, чтобы выделилась память под NULL-Terminator
-		this->str = new char[size] {};
+		//this->str = new char[size] {};
 		for (int i = 0; i < size; i++) this->str[i] = str[i];
 		cout << "Constructor:\t\t" << this << endl;
 	}
 	
-	String(const String& other) {
-		this->size = other.size;
+	String(const String& other) : size(other.size), str(new char [size] {}) {
+		//this->size = other.size;
 		//this->str = other.str;    //Shallow copy
 		//Deep copy:
-		this->str = new char[size] {};
+		//this->str = new char[size] {};
 		for (int i = 0; i < size; i++)
 			this->str[i] = other.str[i];
 		cout << "CopyConstructor:\t" << this << endl;
 	}
 	
-	String(String&& other) {
+	String(String&& other) : size(other.size), str(other.str) {
 		// MoveConstructor -Shallow copy
-		this->size = other.size;
-		this->str = other.str;
+		//this->size = other.size;
+		//this->str = other.str;
 		// обнуляем принимаемый объект, для того, чтобы предотвратить удаление его ресурсов деструктором
 		other.size = 0;
 		other.str = nullptr;
@@ -216,9 +216,12 @@ void main() {
 	
 	String str10(str9);
 	str10.print();
+	
 
 	// Фигурные скобки для вызова конструкторов следует использовать с большой осторожностью
 
+	String str11 = str3+str8;
+	str11.print();
 
 }			
 			
